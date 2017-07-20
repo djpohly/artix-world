@@ -5,15 +5,15 @@
 
 pkgname=polkit
 pkgver=0.113+29+g3272a98
-pkgrel=9
+pkgrel=10
 pkgdesc="PolyciKit with elogind support for non-systemd systems"
 arch=('i686' 'x86_64' 'armv7h')
 url="http://www.freedesktop.org/wiki/Software/polkit"
 license=('LGPL')
 # provides=("polkit=$pkgver")
-depends=('glib2' 'pam' 'expat' 'js' 'libelogind')
-makedepends=('intltool' 'gtk-doc' 'gobject-introspection' 'git' 'autoconf-archive')
-# conflicts=('polkit' 'polkit-consolekit')
+depends=('glib2' 'pam' 'expat' 'js' 'elogind')
+makedepends=('intltool' 'gtk-doc' 'gobject-introspection' 'git' 'autoconf-archive' 'libelogind')
+# conflicts=('polkit-consolekit')
 #replaces=('polkit-consolekit')
 options=('!libtool')
 install=polkit.install
