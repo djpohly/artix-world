@@ -4,14 +4,14 @@
 
 pkgname=udisks2
 pkgver=2.7.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Disk Management Service, version 2"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/udisks"
 license=('GPL2')
 # groups=('elogind-nosystemd')
 depends=('glib2' 'polkit' 'libatasmart' 'libgudev' 'eudev' 'libblockdev')
-makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'gnome-common')
+makedepends=('docbook-xsl' 'gobject-introspection' 'gnome-common' 'intltool' 'parted' 'libiscsi')
 optdepends=('parted: partition management'
             'gptfdisk: GUID partition table support'
             'ntfs-3g: NTFS filesystem management support'
@@ -34,7 +34,8 @@ build() {
       --localstatedir=/var \
       --disable-static \
       --sbindir=/usr/bin \
-      --libexecdir=/usr/lib
+      --libexecdir=/usr/lib \
+      --enable-available-modules
   make
 }
 
