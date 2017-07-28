@@ -4,14 +4,15 @@
 
 pkgname=libinput
 pkgver=1.8.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Input device management and event handling library"
 arch=(i686 x86_64)
 url="https://www.freedesktop.org/wiki/Software/libinput/"
 license=(custom:X11)
 depends=('mtdev' 'dbus' 'libevdev' 'libwacom')
 # currently no doc files to install
-makedepends=('doxygen' 'graphviz' 'gtk3' 'meson' 'check')
+makedepends=('doxygen' 'graphviz' 'gtk3' 'meson')
+optdepends=('gtk3: libinput debug-gui')
 # provides=("libinput=${pkgver}" "$pkgname")
 # conflicts=("$pkgname")
 #checkdepends=('check' 'libunwind')
@@ -19,24 +20,26 @@ source=(https://freedesktop.org/software/$pkgname/$pkgname-$pkgver.tar.xz) #{,.s
 sha256sums=('e3590a9037e561a5791c8bd3b34bfd30fad5cacd8cbefc0d75fafe3a41d07147')
 validpgpkeys=('3C2C43D9447D5938EF4551EBE23B7E70B467F0BF') # Peter Hutterer (Who-T) <office@who-t.net>
 
-build() {
+prepare() {
+  mkdir build
   cd $pkgname-$pkgver
-  ./configure --prefix=/usr --disable-static
-  make
 }
 
-check() {
-  cd $pkgname-$pkgver
-# disabled for now:
-# https://github.com/libcheck/check/issues/18
-#  make check
+build() {
+  cd build
+  meson --prefix=/usr --buildtype=release ../$pkgname-$pkgver --libexecdir=/usr/lib \
+    -Dtests=false
+  ninja
 }
 
 package() {
-  cd $pkgname-$pkgver
-  make DESTDIR="$pkgdir" install
-  install -Dm644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+  cd build
+  DESTDIR="$pkgdir" ninja install
+
+  cd ../$pkgname-$pkgver
+  install -Dvm644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
   # install doc - no Makefile target
-  install -v -dm755 ${pkgdir}/usr/share/doc/libinput
-  cp -rv doc/html/* ${pkgdir}/usr/share/doc/libinput
+  install -dv "$pkgdir/usr/share/doc/libinput"
+  cp -av doc/html/* "$pkgdir/usr/share/doc/libinput"
 }
