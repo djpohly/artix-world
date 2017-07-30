@@ -7,36 +7,19 @@ _patch_url=https://raw.githubusercontent.com/gentoo/gentoo/eca95e70409810b07a077
 
 pkgbase=bluez
 pkgname=('bluez' 'bluez-utils' 'bluez-libs' 'bluez-cups' 'bluez-hid2hci' 'bluez-plugins')
-pkgver=5.45
+pkgver=5.46
 pkgrel=1
 url="http://www.bluez.org/"
 arch=('i686' 'x86_64')
 license=('GPL2')
 makedepends=('dbus' 'libical' 'eudev')
 source=(https://www.kernel.org/pub/linux/bluetooth/${pkgname}-${pkgver}.tar.{xz,sign}
-        bluetooth.modprobe
-        ${_patch_url}/0002-autopair-Don-t-handle-the-iCade.patch
-        ${_patch_url}/0001-obex-Use-GLib-helper-function-to-manipulate-paths.patch
-        ${_patch_url}/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
-        ${_patch_url}/bluez-udevadm-path.patch)
+        bluetooth.modprobe)
 # see https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc
-sha256sums=('4cacb00703a6bc149cb09502257d321597d43952374a16f3558766ffa85364e9'
+sha256sums=('ddab3d3837c1afb8ae228a94ba17709a4650bd4db24211b6771ab735c8908e28'
             'SKIP'
-            '46c021be659c9a1c4e55afd04df0c059af1f3d98a96338236412e449bf7477b4'
-            '219c595ea7d022abc70221f99861815b248c46f45eef66006e7a77a0c9bd8911'
-            '86e3d24527f44c5a225e6d92457be52026481a7ac0d7944700ef4445d8afc8b4'
-            '4c07ccb23953e83d805b8b0c726a08121dc17deb26f7571bca32dfafe7bd2881'
-            '894f3e8ae0088b07687cebe54130bdf228a37717c652a0ec9ec2e76a58ca7eaf')
+            '46c021be659c9a1c4e55afd04df0c059af1f3d98a96338236412e449bf7477b4')
 validpgpkeys=('E932D120BC2AEC444E558F0106CA9F5D1DCF2659') # Marcel Holtmann <marcel@holtmann.org>
-
-prepare(){
-    cd ${pkgname}-${pkgver}
-    patch -Np 1 -i ${srcdir}/0002-autopair-Don-t-handle-the-iCade.patch
-    patch -Np 1 -i ${srcdir}/0001-obex-Use-GLib-helper-function-to-manipulate-paths.patch
-    patch -Np 1 -i ${srcdir}/0001-Allow-using-obexd-without-systemd-in-the-user-sessio.patch
-    patch -Np 1 -i ${srcdir}/bluez-udevadm-path.patch
-    #autoreconf -v
-}
 
 build() {
   cd ${pkgname}-${pkgver}
