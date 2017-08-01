@@ -1,0 +1,53 @@
+# Maintainer: Chris Cromer <chris@cromer.cl>
+# Contributor: Guillaume Benoit <guillaume@manjaro.org>
+
+pkgbase=pamac
+pkgname=('pamac' 'pamac-tray-appindicator')
+pkgver=4.9.0
+_pkgver=4.9.0
+pkgrel=1
+pkgdesc="A Gtk3 frontend for libalpm"
+arch=('i686' 'x86_64')
+url="https://github.com/manjaro/pamac"
+license=('GPL3')
+depends=('glib2>=2.42' 'json-glib' 'libsoup' 'dbus-glib' 'polkit' 'vte3>=0.38' 'gtk3>=3.22'
+         'libnotify' 'desktop-file-utils' 'pacman>=5.0' 'pacman<5.1' 'gnutls>=3.4')
+makedepends=('gettext' 'itstool' 'vala>=0.36' 'libappindicator-gtk3')
+options=(!emptydirs)
+
+source=("pamac-$pkgver-$pkgrel.tar.gz::$url/archive/v$_pkgver.tar.gz")
+sha256sums=('fa6cf889e713802ae543e77f0630f151c76c503a7c5a3429a7779f609080210d')
+
+prepare() {
+  # adjust version string
+  cd "$srcdir/pamac-$_pkgver"
+  sed -i -e "s|\"$pkgver\"|\"$pkgver-$pkgrel\"|g" src/transaction.vala
+  # patches here
+}
+
+build() {
+  cd "$srcdir/pamac-$_pkgver"
+
+  # build
+  make all
+}
+
+package_pamac() {
+  optdepends=('polkit-gnome: needed for authentification in Cinnamon, Gnome'
+              'lxsession: needed for authentification in Xfce, LXDE etc.'
+              'pamac-tray-appindicator: tray icon for KDE')
+  backup=('etc/pamac.conf')
+  replaces=('pamac-aur')
+  install=pamac.install
+  cd "$srcdir/pamac-$_pkgver"
+  make prefix="$pkgdir"/usr sysconfdir="$pkgdir"/etc install
+}
+
+package_pamac-tray-appindicator() {
+  pkgdesc="Tray icon using appindicator which feets better in KDE"
+  depends=('pamac' 'libappindicator-gtk3')
+  cd "$srcdir/pamac-$_pkgver"
+  make use_appindicator=true
+  make prefix="$pkgdir"/usr sysconfdir="$pkgdir"/etc install_pamac-tray-appindicator
+}
+# vim:set ts=2 sw=2 et:
