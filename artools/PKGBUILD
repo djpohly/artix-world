@@ -20,7 +20,7 @@ if $_pbuild;then
 fi
 pkgname=("${_pkgname[@]}")
 pkgver=0.5
-pkgrel=1
+pkgrel=2
 arch=('any')
 pkgdesc='Development tools for Artix'
 license=('GPL')
@@ -75,6 +75,7 @@ package_artools-base() {
 package_artools-pkg() {
     pkgdesc='Development tools for Artix (packaging tools)'
     depends=('artools-base' 'namcap' 'wget')
+    conflicts=('devtools')
 
     cd ${srcdir}/${pkgbase}-${pkgver}
     make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_pkg
