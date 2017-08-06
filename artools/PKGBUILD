@@ -4,7 +4,7 @@ _url="https://github.com/artix-linux/iso-profiles"
 _profiles=iso-profiles
 
 _tbuild=true
-_pbuild=false
+_pbuild=true
 
 pkgbase=artools
 if $_tbuild;then
@@ -19,7 +19,7 @@ if $_pbuild;then
     _source+=("${_profiles}-${pkgver}.tar.gz::$_url/archive/${pkgver}.tar.gz")
 fi
 pkgname=("${_pkgname[@]}")
-pkgver=0.4.2
+pkgver=0.5
 pkgrel=1
 arch=('any')
 pkgdesc='Development tools for Artix'
@@ -36,7 +36,8 @@ if $_pbuild;then
     _source+=("${_profiles}-${pkgver}.tar.gz::$_url/archive/${pkgver}.tar.gz")
 fi
 source=("${_source[@]}")
-sha256sums=('')
+sha256sums=('fbb2fbcc932af2366d2611cb9156276ac57430f5c310f33da96e79e172298a36'
+            'cc516887646fda67d0b96f7d8f58146db8f0cf5f3566a7fbf3288f04bffbbacf')
 
 prepare() {
     if $_tbuild;then
