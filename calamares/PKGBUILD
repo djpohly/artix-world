@@ -1,7 +1,7 @@
 # Maintainer: artoo <artoo@cromnix.org>
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
-_commit=eec6eb1d43d8d6771b1c09864756019a4561f391
+_commit=d8332d1bef890ef8a8c2b50773500735ccec669b
 
 pkgname=calamares
 pkgver=3.1.1
@@ -20,7 +20,7 @@ backup=('usr/share/calamares/modules/bootloader.conf'
         'usr/share/calamares/modules/unpackfs.conf')
 
 source=("$pkgname-$pkgver.tar.gz::https://github.com/artix-linux/calamares/archive/${_commit}.tar.gz")
-sha256sums=('ce5f5db0d223679c58ee442af59d5cde8a6b8f23dcb56af4c71ee5ff4acb1e87')
+sha256sums=('b3679c254910c2f1fc729fd38ff55347befb2376603bbea59c1d3ce76db0009b')
 
 # pkgver() {
 #     cd $pkgname
