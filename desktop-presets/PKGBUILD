@@ -5,17 +5,18 @@ pkgbase=desktop-presets
 pkgname=(
         'artix-icons'
         'artix-backgrounds'
+        'artix-i3-presets'
         'artix-lxqt-presets'
         'artix-cinnamon-presets'
 )
-pkgver=0.4.1
-pkgrel=1
+pkgver=0.4.2
+pkgrel=3
 arch=('any')
 url="https://github.com/artix-linux/desktop-presets"
 license=('GPL')
 makedepends=('git')
 source=("${pkgbase}-${pkgver}.tar.gz::$url/archive/${pkgver}.tar.gz")
-sha256sums=('40cdea62a5a2178f838345da8babc9acc5d3c779a7ebaf995685692a4fb10a19')
+sha256sums=('1ff5e6a7f76a846ad447cc60efc1b10caa6d4cdb122a221747097c10502e54e6')
 
 _inst_dir(){
     cd ${pkgbase}-${pkgver}
@@ -71,4 +72,15 @@ package_artix-cinnamon-presets() {
     replaces=('artix-cinnamon-basic-presets')
 
     _inst_dir 'cinnamon'
+}
+
+package_artix-i3-presets() {
+    pkgdesc='Artix i3 presets'
+    depends=('breeze-icons'
+            'breeze-gtk'
+            'artix-backgrounds'
+            'artix-icons')
+    provides=('desktop-presets')
+
+    _inst_dir 'i3'
 }
