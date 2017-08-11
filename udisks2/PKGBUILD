@@ -3,8 +3,8 @@
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
 pkgname=udisks2
-pkgver=2.7.1
-pkgrel=2
+pkgver=2.7.2
+pkgrel=1
 pkgdesc="Disk Management Service, version 2"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/udisks"
@@ -19,7 +19,7 @@ optdepends=('parted: partition management'
 # provides=("udisks2=${pkgver}")
 # conflicts=('udisks2')
 source=("udisks2-${pkgver}::https://github.com/storaged-project/udisks/archive/udisks-${pkgver}.tar.gz")
-sha256sums=('020f661d5350a094f63c7575f2b428e3f98edcf949a3267fc14a46ede814c662')
+sha256sums=('34d834520efcfbb8cca33ccf703e45752b32772ae766673dab6360202c7838aa')
 
 prepare(){
     cd "udisks-udisks-$pkgver"
@@ -28,6 +28,7 @@ prepare(){
 
 build() {
   cd "udisks-udisks-$pkgver"
+  export LANG=en_US.UTF-8
   ./autogen.sh \
       --prefix=/usr \
       --sysconfdir=/etc \
