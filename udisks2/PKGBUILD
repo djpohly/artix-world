@@ -4,49 +4,48 @@
 
 pkgname=udisks2
 pkgver=2.7.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Disk Management Service, version 2"
 arch=('i686' 'x86_64')
 url="http://www.freedesktop.org/wiki/Software/udisks"
 license=('GPL2')
-# groups=('elogind-nosystemd')
 depends=('glib2' 'polkit' 'libatasmart' 'libgudev' 'eudev' 'libblockdev')
 makedepends=('docbook-xsl' 'gobject-introspection' 'gnome-common' 'intltool' 'parted' 'libiscsi')
 optdepends=('parted: partition management'
             'gptfdisk: GUID partition table support'
             'ntfs-3g: NTFS filesystem management support'
             'dosfstools: VFAT filesystem management support')
-# provides=("udisks2=${pkgver}")
-# conflicts=('udisks2')
 source=("udisks2-${pkgver}::https://github.com/storaged-project/udisks/archive/udisks-${pkgver}.tar.gz")
 sha256sums=('34d834520efcfbb8cca33ccf703e45752b32772ae766673dab6360202c7838aa')
 
 prepare(){
-    cd "udisks-udisks-$pkgver"
-#     sed -i "s:udisksprivdir:udisksdprivdir:" data/Makefile.am
+#     cd "udisks-udisks-$pkgver"
+    sed -e 's/AC_MSG_ERROR(\[libstoragemgmt/AC_MSG_WARN([libstoragemgmt/' \
+        -e 's/AC_MSG_ERROR(\[libconfig/AC_MSG_WARN([libconfig/' \
+        -i udisks-udisks-$pkgver/configure.ac
 }
 
 build() {
-  cd "udisks-udisks-$pkgver"
-  export LANG=en_US.UTF-8
-  ./autogen.sh \
-      --prefix=/usr \
-      --sysconfdir=/etc \
-      --localstatedir=/var \
-      --disable-static \
-      --sbindir=/usr/bin \
-      --libexecdir=/usr/lib \
-      --enable-available-modules
-  make
+    cd "udisks-udisks-$pkgver"
+    #export LANG=en_US.UTF-8
+    ./autogen.sh \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --disable-static \
+        --sbindir=/usr/bin \
+        --libexecdir=/usr/lib \
+        --with-systemdsystemunitdir=no #--enable-available-modules
+    make
 }
 
 check() {
-  cd udisks-udisks-$pkgver
-  make check
+    cd udisks-udisks-$pkgver
+    make check
 }
 
 package() {
-  cd "udisks-udisks-$pkgver"
-  make DESTDIR="$pkgdir" install \
-    bash_completiondir=/usr/share/bash-completion/completions
+    cd "udisks-udisks-$pkgver"
+    make DESTDIR="$pkgdir" install \
+        bash_completiondir=/usr/share/bash-completion/completions
 }
