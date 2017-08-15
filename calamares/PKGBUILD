@@ -1,11 +1,11 @@
 # Maintainer: artoo <artoo@cromnix.org>
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
-_commit=d8332d1bef890ef8a8c2b50773500735ccec669b
+_commit=41281849b2c716a70856cc3a0c22452819e3732a
 
 pkgname=calamares
 pkgver=3.1.1
-pkgrel=4
+pkgrel=6
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -20,7 +20,7 @@ backup=('usr/share/calamares/modules/bootloader.conf'
         'usr/share/calamares/modules/unpackfs.conf')
 
 source=("$pkgname-$pkgver.tar.gz::https://github.com/artix-linux/calamares/archive/${_commit}.tar.gz")
-sha256sums=('b3679c254910c2f1fc729fd38ff55347befb2376603bbea59c1d3ce76db0009b')
+sha256sums=('902bd984233553bdbf6007a922b69fda5f0b8f0d45d042c06157a2306bd5e313')
 
 # pkgver() {
 #     cd $pkgname
