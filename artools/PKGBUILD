@@ -1,28 +1,8 @@
-# Maintainer: artoo <artoo@manjaro.org>
-
-_url="https://github.com/artix-linux/iso-profiles"
-_profiles=iso-profiles
-
-_tbuild=true
-_pbuild=false
+# Maintainer: artoo <artoo@cromnix.org>
 
 pkgbase=artools
-if $_tbuild;then
-    _pkgname=('artools-base' 'artools-pkg' 'artools-yaml' 'artools-iso')
-    _source=("${pkgbase}-${pkgver}.tar.gz::$url/archive/${pkgver}.tar.gz")
-else
-    _pkgname=()
-    _source=()
-fi
-if $_pbuild;then
-    _pkgname+=(
-        'artools-iso-base'
-        'artix-iso-profiles'
-        )
-    _source+=("${_profiles}-${pkgver}.tar.gz::$_url/archive/${pkgver}.tar.gz")
-fi
-pkgname=("${_pkgname[@]}")
-pkgver=0.5.1
+pkgname=('artools-base' 'artools-pkg' 'artools-iso-base'  'artools-yaml' 'artools-iso')
+pkgver=0.5.2
 pkgrel=1
 arch=('any')
 pkgdesc='Development tools for Artix'
@@ -30,36 +10,18 @@ license=('GPL')
 groups=('artools')
 url='https://github.com/artix-linux/artools'
 # makedepends=('git')
-if $_tbuild;then
-    _source=("${pkgbase}-${pkgver}.tar.gz::$url/archive/${pkgver}.tar.gz")
-else
-    _source=()
-fi
-if $_pbuild;then
-    _source+=("${_profiles}-${pkgver}.tar.gz::$_url/archive/${pkgver}.tar.gz")
-fi
-source=("${_source[@]}")
-sha256sums=('1bb2e92b39144f0b008353b2f1e8723550d0bb5b367a0c7a587ad294b5fec63b')
+source=("${pkgbase}-${pkgver}.tar.gz::$url/archive/${pkgver}.tar.gz")
+sha256sums=('503a9f34b700de3341d388a9b7deddfcf3f3c5f6b565f6f2b19d7dd211340f63')
 
 prepare() {
-    if $_tbuild;then
-        cd ${srcdir}/${pkgbase}-${pkgver}
-        sed -e "s/^Version=.*/Version=${pkgver}/" -i Makefile
-    fi
-    if $_pbuild;then
-        cd ${srcdir}/${_profiles}-${pkgver}
-        sed -e "s/^Version=.*/Version=${pkgver}/" -i Makefile
-    fi
+    cd ${srcdir}/${pkgbase}-${pkgver}
+    sed -e "s/^Version=.*/Version=${pkgver}/" -i Makefile
     # patches here
 }
 
 build() {
-    if $_tbuild;then
-        cd ${srcdir}/${pkgbase}-${pkgver}
-        make SYSCONFDIR=/etc PREFIX=/usr
-    else
-        echo
-    fi
+    cd ${srcdir}/${pkgbase}-${pkgver}
+    make SYSCONFDIR=/etc PREFIX=/usr
 }
 
 package_artools-base() {
@@ -91,6 +53,13 @@ package_artools-yaml() {
     make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_yaml
 }
 
+package_artools-iso-base() {
+    pkgdesc='Development tools for Artix (ISO base profile)'
+
+    cd ${srcdir}/${pkgbase}-${pkgver}
+    make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_isobase
+}
+
 package_artools-iso() {
     pkgdesc='Development tools for Artix (ISO tools)'
     depends=('artools-yaml' 'dosfstools' 'libisoburn' 'squashfs-tools' 'mkinitcpio' 'mktorrent' 'grub')
@@ -99,17 +68,3 @@ package_artools-iso() {
     make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_iso
 }
 
-package_artools-iso-base() {
-    pkgdesc='Development tools for Artix (ISO base profile)'
-
-    cd ${srcdir}/${_profiles}-${pkgver}
-    make PREFIX=/usr DESTDIR=${pkgdir} install_base
-}
-
-package_artix-iso-profiles() {
-    pkgdesc='Artix iso profiles'
-    depends=("artools-yaml>=0.2")
-
-    cd ${srcdir}/${_profiles}-${pkgver}
-    make PREFIX=/usr DESTDIR=${pkgdir} install_profiles
-}
