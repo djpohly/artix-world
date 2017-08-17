@@ -1,0 +1,26 @@
+# $Id$
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Bartłomiej Piotrowski
+# Contributor: Stefan Husmann <stefan-husmann@t-online.de>
+
+pkgname=jbig2dec
+pkgver=0.13
+pkgrel=1
+pkgdesc='Decoder implementation of the JBIG2 image compression format'
+url='http://www.ghostscript.com/jbig2dec.html'
+arch=('x86_64' 'i686')
+license=('GPL3')
+depends=('libpng')
+source=("http://downloads.ghostscript.com/public/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+sha256sums=('5aaca0070992cc2e971e3bb2338ee749495613dcecab4c868fc547b4148f5311')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	./autogen.sh --prefix=/usr
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make DESTDIR="${pkgdir}" install
+}
