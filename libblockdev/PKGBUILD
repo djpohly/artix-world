@@ -1,0 +1,36 @@
+# $Id$
+# Maintainer: Felix Yan <felixonmars@archlinux.org>
+
+pkgname=libblockdev
+pkgver=2.10
+pkgrel=1
+pkgdesc="A library for manipulating block devices"
+arch=('i686' 'x86_64')
+url="https://github.com/rhinstaller/libblockdev"
+license=('LGPL')
+depends=('btrfs-progs' 'dosfstools' 'dmraid' 'gptfdisk' 'libbytesize' 'lvm2' 'mdadm' 'parted'
+         'volume_key' 'xfsprogs' 'kmod')
+makedepends=('gobject-introspection' 'systemd' 'python')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/rhinstaller/libblockdev/archive/$pkgver-1.tar.gz")
+sha512sums=('f808fd327b0e250cfb97a06ea716b5eb5c6812301b7da1cd6b757b3af44ceca038fe549f607b71fa395cfb1da6c70c20c8a224953fbc30ebe36c3d0e897eb15b')
+
+prepare() {
+  sed -i 's/-ldmraid //' $pkgname-$pkgver-1/src/lib/Makefile.am
+}
+
+build() {
+  cd "$srcdir"/$pkgname-$pkgver-1
+  ./autogen.sh
+  ./configure --prefix=/usr --sysconfdir=/etc --without-lvm_dbus
+  make
+}
+
+check() {
+  cd "$srcdir"/$pkgname-$pkgver-1
+  make check
+}
+
+package() {
+  cd "$srcdir"/$pkgname-$pkgver-1
+  make DESTDIR="$pkgdir" install
+}
