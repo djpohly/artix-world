@@ -3,13 +3,13 @@
 # Maintainer: Dan McGee <dan@archlinux.org>
 
 pkgname=git
-pkgver=2.13.3
-pkgrel=2
+pkgver=2.14.1
+pkgrel=1
 pkgdesc="the fast distributed version control system"
 arch=(i686 x86_64)
 url="http://git-scm.com/"
 license=('GPL2')
-depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre')
+depends=('curl' 'expat>=2.0' 'perl-error' 'perl>=5.14.0' 'openssl' 'pcre2')
 makedepends=('python2' 'emacs' 'libgnome-keyring' 'xmlto' 'asciidoc')
 optdepends=('tk: gitk and git gui'
             'perl-libwww: git svn'
@@ -30,7 +30,7 @@ install=git.install
 validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7') # Junio C Hamano
 source=("https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz"
         "https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.sign")
-sha256sums=('91aa23be428f67eb19616f43fa0229d567e9acf4f08fba33eb0b627e4d323e62'
+sha256sums=('6f724c6d0e9e13114ab35db6f67e1b2c1934b641e89366e6a0e37618231f2cc6'
             'SKIP')
 
 build() {
@@ -38,7 +38,7 @@ build() {
   cd "$srcdir/$pkgname-$pkgver"
   make prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
-    USE_LIBPCRE=1 \
+    USE_LIBPCRE2=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
     MAN_BOLD_LITERAL=1 \
     all doc
@@ -62,7 +62,7 @@ check() {
   SHELL=/bin/sh \
   make prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
-    USE_LIBPCRE=1 \
+    USE_LIBPCRE2=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
     MAN_BOLD_LITERAL=1 \
     NO_SVN_TESTS=y \
@@ -77,7 +77,7 @@ package() {
   cd "$srcdir/$pkgname-$pkgver"
   make prefix=/usr gitexecdir=/usr/lib/git-core \
     CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" \
-    USE_LIBPCRE=1 \
+    USE_LIBPCRE2=1 \
     NO_CROSS_DIRECTORY_HARDLINKS=1 \
     MAN_BOLD_LITERAL=1 \
     INSTALLDIRS=vendor DESTDIR="$pkgdir" install install-doc

@@ -1,0 +1,31 @@
+# Maintainer: Chris Cromer <chris@cromer.cl>
+
+pkgname=runit-artix
+pkgver=20170818
+pkgrel=1
+pkgdesc='Runit initscripts for Artix'
+provides=('runit-init')
+url='https://github.com/artix-linux/runit-artix/'
+license=('custom:CC0')
+arch=('i686' 'x86_64')
+depends=('procps-ng' 'awk' 'sh' 'eudev')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/artix-linux/runit-artix/archive/${pkgver}.tar.gz")
+backup=('etc/runit/rc.conf'
+        'etc/runit/rc.local'
+        'etc/runit/rc.shutdown')
+sha256sums=('919e739bb284a062c8657712de9d7d28d44175549d559f3195fb6a45c2aab8e8')
+
+build() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+	make
+}
+
+package() {
+	cd "${srcdir}/${pkgname}-${pkgver}"
+
+	make DESTDIR="${pkgdir}" PREFIX="/usr" install
+
+	# License
+	mkdir -p "${pkgdir}"/usr/share/licenses/runit-artix
+	sed -n '/To the extent/,/0/p' README.md > "${pkgdir}"/usr/share/licenses/runit-artix/LICENSE
+}
