@@ -1,0 +1,25 @@
+# $Id$
+# Maintainer: Antonio Rojas <arojas@archlinux.org>
+
+pkgname=tslib
+pkgver=1.12
+pkgrel=1
+pkgdesc="Touchscreen Access Library"
+arch=(i686 x86_64)
+url="https://github.com/kergoth/tslib"
+license=(GPL2)
+depends=(glibc)
+makedepends=()
+source=("https://github.com/kergoth/tslib/releases/download/$pkgver/$pkgname-$pkgver.tar.xz")
+sha256sums=('237f66c9e53789429b1bcc89a36eb7a37f1deb2877e6e7d928e994e3c48d0b83')
+
+build() {
+  cd $pkgname-$pkgver
+  ./configure --prefix=/usr --sysconfdir=/etc
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+  make DESTDIR="$pkgdir" install
+}

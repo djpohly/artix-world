@@ -1,0 +1,43 @@
+# $Id$
+# Maintainer: Jan de Groot <jgc@archlinux.org>
+
+pkgname=upower
+pkgver=0.99.4+12+g402640b
+pkgrel=3
+pkgdesc="Abstraction for enumerating power devices, listening to device events and querying history and statistics"
+arch=('i686' 'x86_64')
+url="http://upower.freedesktop.org"
+license=('GPL')
+#groups=('elogind-nosystemd')
+depends=('eudev' 'libusb' 'libimobiledevice' 'libgudev')
+makedepends=('intltool' 'docbook-xsl' 'gobject-introspection' 'python2' 'git' 'gtk-doc')
+#provides=("$pkgname=$pkgver")
+#conflicts=("$pkgname")
+backup=('etc/UPower/UPower.conf')
+_commit=402640bee016472bf61c7a4ad9e5fac9790ea1bf
+source=(git://anongit.freedesktop.org/upower#commit=$_commit)
+md5sums=('SKIP')
+
+pkgver() {
+    cd $pkgname
+    git describe --tags | sed -e 's/UPOWER_//' -e 's/_/\./g' -e 's/-/+/g'
+}
+
+build() {
+    cd $pkgname
+
+    NOCONFIGURE=1 ./autogen.sh
+
+    ./configure \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --localstatedir=/var \
+        --libexecdir=/usr/lib/$pkgname \
+        --disable-static
+    make
+}
+
+package() {
+    cd $pkgname
+    make DESTDIR="$pkgdir" install
+}

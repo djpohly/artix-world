@@ -1,0 +1,23 @@
+# $Id$
+# Maintainer: Gaetan Bisson <bisson@archlinux.org>
+# Contributor: Firmicus <francois.archlinux.org>
+# Contributor: dorphell <dorphell@archlinux.org>
+
+pkgname=gsfonts
+_pkgname=urw-core35-fonts
+pkgver=20170727
+pkgrel=1
+pkgdesc='URW+ Postscript core35 fonts'
+url='http://git.ghostscript.com/?p=urw-core35-fonts.git'
+arch=('any')
+license=('AGPL3')
+makedepends=('git')
+depends=('xorg-font-utils' 'fontconfig')
+source=("git://git.ghostscript.com/${_pkgname}.git#commit=91edd6ece36e84a1c6d63a1cf63a1a6d84bd443a")
+sha256sums=('SKIP')
+
+package() {
+	cd "${srcdir}/${_pkgname}"
+	install -d "${pkgdir}"/usr/share/fonts/OTF
+	install -m644 *.otf "${pkgdir}"/usr/share/fonts/OTF
+}

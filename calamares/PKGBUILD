@@ -1,0 +1,56 @@
+# Maintainer: artoo <artoo@cromnix.org>
+# Contributor: Philip Müller <philm[at]manjaro[dog]org>
+
+_commit=41281849b2c716a70856cc3a0c22452819e3732a
+
+pkgname=calamares
+pkgver=3.1.1
+pkgrel=6
+pkgdesc='Distribution-independent installer framework'
+arch=('i686' 'x86_64')
+license=(GPL)
+url="https://github.com/artix-linux/calamares"
+license=('LGPL')
+depends=('kconfig' 'kcoreaddons' 'ki18n' 'solid' 'yaml-cpp' 'kpmcore>=3.1.0'
+         'boost-libs' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'python-pyqt5')
+makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'boost')
+backup=('usr/share/calamares/modules/bootloader.conf'
+        'usr/share/calamares/modules/displaymanager.conf'
+        'usr/share/calamares/modules/initcpio.conf'
+        'usr/share/calamares/modules/unpackfs.conf')
+
+source=("$pkgname-$pkgver.tar.gz::https://github.com/artix-linux/calamares/archive/${_commit}.tar.gz")
+sha256sums=('902bd984233553bdbf6007a922b69fda5f0b8f0d45d042c06157a2306bd5e313')
+
+# pkgver() {
+#     cd $pkgname
+#     git describe --tags | sed 's/-/+/g'
+# }
+
+prepare() {
+	mv ${srcdir}/calamares-${_commit} ${srcdir}/calamares-${pkgver}
+	cd ${srcdir}/calamares-${pkgver}
+	# patches here
+}
+
+build() {
+	cd ${srcdir}/calamares-${pkgver}
+
+	mkdir -p build
+	cd build
+        cmake .. \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX=/usr \
+              -DCMAKE_INSTALL_LIBDIR=lib \
+              -DWITH_PYTHONQT:BOOL=ON \
+              -DSKIP_MODULES="webview interactiveterminal initramfs \
+                              initramfscfg dracut dracutlukscfg \
+                              dummyprocess dummypython dummycpp \
+                              dummypythonqt"
+        make
+}
+
+package() {
+	cd ${srcdir}/calamares-${pkgver}/build
+	make DESTDIR="$pkgdir" install
+}
